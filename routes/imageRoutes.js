@@ -16,8 +16,8 @@ router.get('/images', imageController.getAllImages);
 // GET /api/images/:id - Get a specific image by ID
 router.get('/images/:id', imageController.getImageById);
 
-// PUT /api/images/:id - Update an image
-router.put('/images/:id', imageController.updateImage);
+// // PUT /api/images/:id - Update an image
+// router.put('/images/:id', imageController.updateImage);
 
 // DELETE /api/images/:id - Delete an image
 router.delete('/images/:id', imageController.deleteImage);

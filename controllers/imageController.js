@@ -3,21 +3,36 @@ const Image = require('../models/imageModel');
 const multer = require("multer")
 const path = require('path');
 const fs = require('fs');
+const { validationResult } = require('express-validator');
 // Controller functions for each route related to image uploads
 // Define the path to your file
 
 // Multer configuration for file storage
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'uploads/'); // Set the destination folder for uploaded images
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.originalname); // Generate a unique filename for each uploaded image
+// Set up multer to handle file uploads
+const upload = multer({
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '..', 'uploads'));
+      },
+      filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+      },
+    }),
+    fileFilter: (req, file, cb) => {
+      // Validate file types (accept only images)
+      if (!file.mimetype.startsWith('image/')) {
+        return cb(new Error('Only image files are allowed'));
+      }
+  
+      // Validate file size (limit to 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        return cb(new Error('File size should be less than 2MB'));
+      }
+  
+      cb(null, true);
     },
   });
-
-  // Multer upload instance
-const upload = multer({ storage });
+  
   
 const uploadImage = async (req, res) => {
     // Check if there is a file in the request
@@ -41,7 +56,7 @@ const uploadImage = async (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).json({ error: 'Failed to save image to the database' });
+      res.status(500).json(err);
     });
 };
 
@@ -78,12 +93,12 @@ const getImageById = async (req, res) => {
 //   res.status(200).json({message:"successful",id});
 };
 
-const updateImage = async (req, res) => {
-    const id = req.params.id
-  // Implement logic to fetch a specific image by its ID from the database
-  // Return the response with the image data
-  res.status(200).json({message:"successful",id});
-};
+// const updateImage = async (req, res) => {
+//     const id = req.params.id
+//   // Implement logic to fetch a specific image by its ID from the database
+//   // Return the response with the image data
+//   res.status(200).json({message:"successful",id});
+// };
 
 const deleteImage = async (req, res) => {
     const { id } = req.params;
@@ -119,7 +134,6 @@ module.exports = {
   uploadImage,
   getAllImages,
   getImageById,
-  updateImage,
   deleteImage,
   upload
 };
