@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
-const config = require("../config/config")
+const config = require("./config")
 
 // Connect to MongoDB
-mongoose
-  .connect(config.mongodb.url, config.mongodb.options)
-  .then(() => {
+const connectToDatabase = async () => {
+  try {
+    await mongoose.connect(config.mongodb.url, config.mongodb.options);
     console.log("Connected to MongoDB!");
-  })
-  .catch((err) => {
+  } catch (err) {
     console.error("Error connecting to MongoDB:", err.message);
-    process.exit(1);
-  });
+    throw err;
+  }
+};
 
 
-module.exports = mongoose.connection;
+
+module.exports = connectToDatabase;

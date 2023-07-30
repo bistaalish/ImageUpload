@@ -36,6 +36,11 @@ const upload = multer({
   
 const uploadImage = async (req, res) => {
     // Check if there is a file in the request
+    // Check for validation errors from multer middleware
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   if (!req.file) {
     return res.status(400).json({ error: 'No image file provided' });
   }
