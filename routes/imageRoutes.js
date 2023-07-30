@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { upload } = require("../controllers/imageController")
 
 // Import the controllers/handlers for each route
 const imageController = require('../controllers/imageController');
@@ -7,7 +8,7 @@ const imageController = require('../controllers/imageController');
 // Define the API routes
 
 // POST /api/upload - Upload an image
-router.post('/upload', imageController.uploadImage);
+router.post('/images', upload.single("image"),imageController.uploadImage);
 
 // GET /api/images - Get all uploaded images
 router.get('/images', imageController.getAllImages);
