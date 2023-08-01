@@ -9,7 +9,18 @@ const db = require("./config/database")
 // const mongoose = require('mongoose');
 // const config = require("./config/config")
 
-
+// // Connect to MongoDB
+// const connectToDatabase = async () => {
+//   try {
+//     await mongoose.connect(config.mongodb.url, config.mongodb.options);
+//     console.log("Connected to MongoDB!");
+//   } catch (err) {
+//     console.error("Error connecting to MongoDB:", err.message);
+//     throw err;
+//   }
+// };
+db();
+// connectToDatabase()
 const app = express();
 // Apply rate limiting middleware to all requests
 const limiter = rateLimit({
