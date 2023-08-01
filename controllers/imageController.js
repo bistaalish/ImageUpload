@@ -72,7 +72,7 @@ const getAllImages = async (req, res) => {
 
     // If there are no images, return an empty array as the response
     if (!images || images.length === 0) {
-      return res.status(200).json([]);
+      return res.status(404).json({"Error":"No Images found"});
     }
 
     // Return the array of images as the response
